@@ -1,16 +1,40 @@
 import React, { useState } from 'react'
-import { useForm } from 'react-hook-form';
+import { useForm, SubmitHandler } from 'react-hook-form';
 import { Link } from 'react-router-dom';
 import { RiEyeCloseLine } from 'react-icons/ri';
 import { MdOutlineRemoveRedEye } from 'react-icons/md';
 
+
+
+interface FormInput {
+    name: string;
+    photo: unknown;
+    email: string,
+    password: string,
+    gender: string
+
+};
+
+
 const SignUp: React.FC = () => {
-    const { register, formState: { errors }, handleSubmit } = useForm();
+    const { register, formState: { errors }, handleSubmit } = useForm<FormInput>();
 
     const [error, setError] = useState<null>();
 
-    const handleSignUp = () => {
+    //state to display the password as text
 
+    const [isDisplayText, setIsDisplayText] = useState(false);
+
+    const handleSignUp: SubmitHandler<FormInput> = (data) => {
+        console.log(data.name);
+    }
+
+
+    //display password as a text clicking on eye icon
+    const handleDisplayText = (e: React.MouseEvent<HTMLButtonElement>) => {
+
+        e.preventDefault();
+        isDisplayText === true ? setIsDisplayText(false) : setIsDisplayText(true);
     }
     return (
         <section className=" register_section lg:py-20 py-14 bg-nudeBlue">
@@ -74,7 +98,7 @@ const SignUp: React.FC = () => {
                             <select
                                 id="types"
                                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                {...register("userType", {
+                                {...register("gender", {
                                     required: "User type is required",
 
 
@@ -85,7 +109,7 @@ const SignUp: React.FC = () => {
                                 <option value="seller">Seller</option>
 
                             </select>
-                            {errors.userType && <p className='text-red-500 mt-1'>{errors.userType.message}</p>}
+                            {errors.gender && <p className='text-red-500 mt-1'>{errors.gender.message}</p>}
                         </div>
                         <div className="mb-1 relative">
                             <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Password</label>
@@ -123,7 +147,7 @@ const SignUp: React.FC = () => {
 
                             {errors.password && <p className='text-red-500 mt-1'>{errors.password.message}</p>}
                         </div>
-                        <button className=" text-white py-2 rounded-lg text-lg  bg-firstCol hover:bg-secondCol" type="submit">
+                        <button className=" text-white py-2 rounded-lg text-lg  bg-blue-500 hover:bg-blue-700" type="submit">
                             Sign Up
                         </button>
                     </form>

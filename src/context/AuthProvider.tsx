@@ -13,7 +13,7 @@ interface AuthContextModel {
     setLoading: React.Dispatch<React.SetStateAction<boolean>>;
     loading: boolean,
     createUser: (email: string, password: string) => Promise<UserCredential>;
-    logOut: () => void;
+    logOut: () => Promise<void>;
     login: (email: string, password: string) => Promise<UserCredential>;
 
 
@@ -26,8 +26,10 @@ const Authcontext = createContext<AuthContextModel>({} as AuthContextModel);
 const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
     const [user, setUser] = useState<User | null>(null);
+
     const [loading, setLoading] = useState<boolean>(true);
 
+    //signup
     const createUser = (email: string, password: string): Promise<UserCredential> => {
         setLoading(true);
         return createUserWithEmailAndPassword(auth, email, password);
@@ -84,6 +86,6 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
 export default AuthProvider;
 
-export const useUserContext = (): AuthContextModel => {
+export const AuthState = (): AuthContextModel => {
     return useContext(Authcontext)
 }
