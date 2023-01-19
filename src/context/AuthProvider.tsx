@@ -6,7 +6,7 @@ export interface AuthProviderProps {
     children?: React.ReactNode
 }
 
-
+//context data type
 interface AuthContextModel {
     auth: Auth;
     user: User | null,
@@ -20,7 +20,9 @@ interface AuthContextModel {
 
 }
 
+//firebase auth
 const auth = getAuth(app);
+
 const Authcontext = createContext<AuthContextModel>({} as AuthContextModel);
 
 const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {

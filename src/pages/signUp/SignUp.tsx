@@ -1,14 +1,15 @@
 import React, { useState } from 'react'
 import { useForm, SubmitHandler } from 'react-hook-form';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { RiEyeCloseLine } from 'react-icons/ri';
 import { MdOutlineRemoveRedEye } from 'react-icons/md';
-
+import { AuthState } from '../../context/AuthProvider';
+import { updateProfile } from "firebase/auth";
 
 
 interface FormInput {
     name: string;
-    photo: unknown;
+    photo: string;
     email: string,
     password: string,
     gender: string
@@ -19,14 +20,46 @@ interface FormInput {
 const SignUp: React.FC = () => {
     const { register, formState: { errors }, handleSubmit } = useForm<FormInput>();
 
+    const { user, setLoading, loading, createUser, auth } = AuthState();
+
+    //navigate to homepage after signup
+    const navigate = useNavigate();
+
     const [error, setError] = useState<null>();
 
     //state to display the password as text
 
     const [isDisplayText, setIsDisplayText] = useState(false);
 
-    const handleSignUp: SubmitHandler<FormInput> = (data) => {
+    const handleSignUp: SubmitHandler<FormInput> = async (data) => {
         console.log(data.name);
+        await createUser(data.email, data.password)
+            .then(res => {
+                const user = res.user;
+                console.log(user);
+
+                //update username and photoUrl
+                updateProfile(user, {
+                    displayName: data.name,
+                    photoURL: data.photo
+                }).then(() => {
+
+                }).catch((error) => {
+                    console.log(error)
+                });
+
+                alert('User signed up successfully');
+                //navigate user to the home page
+                navigate('/');
+
+            })
+            .catch((err) => {
+                console.log(err)
+            })
+            .finally(() => {
+                setLoading(false);
+            })
+
     }
 
 
@@ -37,7 +70,7 @@ const SignUp: React.FC = () => {
         isDisplayText === true ? setIsDisplayText(false) : setIsDisplayText(true);
     }
     return (
-        <section className=" register_section lg:py-20 py-14 bg-nudeBlue">
+        <section className=" register_section lg:py-20 py-14 bg-gray-100">
             <div className='container mx-auto lg:max-w-7xl md:px-10 px-6'>
                 <div className=' form_wrapper bg-white  px-10 py-10 w-full mx-auto lg:max-w-lg rounded'>
                     <h2 className="text-3xl font-semibold text-dark mt-5 mb-10 text-center">Sign Up Now!</h2>
@@ -94,19 +127,20 @@ const SignUp: React.FC = () => {
                             {errors.email && <p className='text-red-500 mt-1'>{errors.email.message}</p>}
                         </div>
                         <div className="mb-1">
-                            <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Select User Type</label>
+                            <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Select Your Gender</label>
                             <select
                                 id="types"
                                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                 {...register("gender", {
-                                    required: "User type is required",
+                                    required: "Gender type is required",
 
 
                                 })}
                             >
-                                <option selected>Choose a user type</option>
-                                <option value="buyer">Buyer</option>
-                                <option value="seller">Seller</option>
+                                <option selected>Choose Your Gender</option>
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                                <option value="others">Others</option>
 
                             </select>
                             {errors.gender && <p className='text-red-500 mt-1'>{errors.gender.message}</p>}
@@ -147,7 +181,7 @@ const SignUp: React.FC = () => {
 
                             {errors.password && <p className='text-red-500 mt-1'>{errors.password.message}</p>}
                         </div>
-                        <button className=" text-white py-2 rounded-lg text-lg  bg-blue-500 hover:bg-blue-700" type="submit">
+                        <button className=" text-white py-2 rounded-lg text-lg  bg-blue-500 hover:bg-blue-900" type="submit">
                             Sign Up
                         </button>
                     </form>

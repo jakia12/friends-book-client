@@ -1,15 +1,23 @@
 import React, { useState } from 'react'
-import { NavLink, Link } from 'react-router-dom';
+import { NavLink, Link, useNavigate } from 'react-router-dom';
 import { GiHamburgerMenu } from 'react-icons/gi';
 import { AiFillCloseCircle, AiOutlineLogout } from 'react-icons/ai';
 import { IoMdArrowDropdown } from 'react-icons/io';
 import './Header.css';
+import { AuthState } from '../../context/AuthProvider';
 const Header: React.FC = () => {
     //state for hamburger menu
     const [isOpen, setIsopen] = useState<boolean>(false);
 
+    //get the auth data 
+    const { logOut, setLoading, user } = AuthState();
+
     //hide user dropdown
     const [showDropdown, setShowDropdown] = useState(false);
+
+
+    //navigate user to the logout page
+    const navigate = useNavigate();
 
     const handleToggle = () => {
         isOpen === true ? setIsopen(false) : setIsopen(true);
@@ -34,7 +42,17 @@ const Header: React.FC = () => {
 
     //logout 
 
-    const handleLogOut = () => {
+    const handleLogOut = async () => {
+        await logOut()
+            .then(() => {
+                navigate('/login');
+            })
+            .catch((err) => {
+                console.log(err)
+            })
+            .finally(() => {
+                setLoading(false);
+            })
 
     }
     return (
@@ -44,7 +62,7 @@ const Header: React.FC = () => {
                 <div className="container flex flex-wrap items-center justify-between">
                     <Link to="/" className="flex items-center">
 
-                        <span className="self-center text-xl font-semibold whitespace-nowrap darkBlack:text-white">Thrift Store</span>
+                        <span className="self-center text-xl font-semibold whitespace-nowrap darkBlack:text-white">FriendBook</span>
                     </Link>
 
                     <div className="responsive_menu">
@@ -128,7 +146,7 @@ const Header: React.FC = () => {
                                 <IoMdArrowDropdown />
                             </button>
                             <div
-                                className="absolute top-16 z-10 left-0 w-44 p-5 rounded shadow-lg shadow-gray-300 bg-gray-100 "
+                                className="absolute top-16 z-10 left-0 w-44 p-5 rounded shadow-lg shadow-gray-300 bg-gray-700 "
                                 style={{ display: showDropdown === true ? "block" : "none" }}
                             >
                                 <ul>
@@ -138,10 +156,10 @@ const Header: React.FC = () => {
                                     <li>
 
                                         <button
-                                            className='flex items-center justify-center text-base'
+                                            className='flex items-center justify-center text-base text-gray-100'
                                             onClick={handleLogOut}
                                         >
-                                            <span className="text-xl text-dark mr-3"> <AiOutlineLogout /></span>
+                                            <span className="text-xl text-gray-100 mr-3"> <AiOutlineLogout /></span>
                                             Sign Out
                                         </button>
                                     </li>
