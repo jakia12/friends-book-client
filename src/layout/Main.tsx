@@ -13,17 +13,19 @@ const Main: React.FC = () => {
             <main className='py-12 bg-gray-100'>
                 <div className="container mx-auto md:max-w-7xl px-8">
                     <div className="flex  md:flex-nowrap flex-wrap">
-                        <div className="w-full md:w-8/12 bg-white" >
-                            <Outlet />
+                        <div className="w-full md:w-9/12 bg-white" >
+                            <div className="m-3">
+                                <Outlet />
+                            </div>
                         </div>
-                        <div className="w-full md:w-4/12" >
-                            <ul className="">
+                        <div className="w-full md:w-3/12" >
+                            <ul className="m-3">
                                 {navItems.map((navItem) => {
                                     const { id, navText, navRoute } = navItem;
                                     return (
-                                        <li key={id} className="w-full">
+                                        <li key={id} className="w-full m-3">
                                             <Link to={navRoute}>
-                                                <span className="bg-blue-500 py-3 px-10 text-white text-lg font-normal block w-full">
+                                                <span className="bg-blue-500 py-3 px-10 text-white text-lg font-normal block w-full rounded">
                                                     {navText}
                                                 </span>
                                             </Link>

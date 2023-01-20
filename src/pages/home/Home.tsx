@@ -16,10 +16,10 @@ const Home: React.FC = () => {
 
                 <div className="flex items-center">
 
-                    <img src={user1} alt="" className="rounded-full border-2 border-blue-500" />
+                    <img src={user1} alt="" className="rounded-full border-2 border-blue-500 w-90 h-90" />
                     <div className="ml-5 text-left">
                         <h2 className="text-3xl font-medium text-dark my-2">{user?.displayName}</h2>
-                        <h4 className="text-xl text-gray-600 font-normal">{"friends count"}</h4>
+                        <h4 className="text-xl text-gray-600 font-normal mb-2">{"friends count"}</h4>
                         <div className="flex items-center">
                             <img src={user2} alt="" className="w-24 h-24 rounded-full" />
                             <img src={user3} alt="" className="w-24 h-24 rounded-full" />

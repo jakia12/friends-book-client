@@ -13,6 +13,7 @@ import Friends from './pages/friends/Friends';
 import AllFriends from './pages/allFriends/AllFriends';
 import Login from './pages/login/Login';
 import SignUp from './pages/signUp/SignUp';
+import Suggestions from './pages/suggestions/Suggestions';
 
 function App() {
   const router = createBrowserRouter(
@@ -21,8 +22,9 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/friends" element={<Friends />} />
         <Route path="/allFriends" element={<AllFriends />} />
+        <Route path="/suggestions" element={<Suggestions />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/sighUp" element={<SignUp />} />
+        <Route path="/signUp" element={<SignUp />} />
         <Route path="*" element={<SignUp />} />
       </Route>
 
